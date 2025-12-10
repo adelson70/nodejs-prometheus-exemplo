@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { UsuariosController } from './usuarios.controller';
 import { UsuariosService } from './usuarios.service';
+import { MetricsModule } from '../metrics/metrics.module';
 
 @Module({
+    imports: [MetricsModule],
     controllers: [UsuariosController],
     providers: [UsuariosService],
     exports: [UsuariosService],

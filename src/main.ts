@@ -3,12 +3,18 @@ import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { MetricsInterceptor } from './interceptors/metrics.interceptor';
+import { MetricsService } from './modules/metrics/metrics.service';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   dotenv.config();
 
   const app = await NestFactory.create(AppModule);
+  
+  // Registrar interceptor global de métricas
+  const metricsService = app.get(MetricsService);
+  app.useGlobalInterceptors(new MetricsInterceptor(metricsService));
 
   const document = SwaggerModule.createDocument(app, new DocumentBuilder()
     .setTitle('API')
